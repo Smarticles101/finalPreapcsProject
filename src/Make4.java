@@ -26,18 +26,20 @@ import java.applet.Applet;
 public class Make4 extends Applet {
 	Board gb = new Board();
 	public void paint(Graphics g) {
-
-		int w = Expo.enterIntGUI("Enter a board width");
-		int h = Expo.enterIntGUI("Enter a board height");
-		
+		paintBoard(g);		
 		startGame(4,g);
 	}
 
-	public void repaint(Graphics g) {
-		paintBoard(g);
-	}
-
 	public void paintBoard(Graphics g) {
+		Expo.setColor(g,Expo.black);
+		for(int y = 0; y<gb.HEIGHT*100; y+=100) {
+			Expo.drawLine(g,0,y,gb.WIDTH*100,y);
+		}
+		for(int x = 0; x<gb.WIDTH*100; x+=100) {
+			Expo.drawLine(g,x,0,x,gb.HEIGHT*100);
+		}
+
+		Expo.drawLine(g,100,0,100,600);
 		for(int y = 0; y<gb.HEIGHT; y++) {
 			for(int x = 0; x<gb.WIDTH; x++) {
 				if(gb.board[x][y] != 0) {
@@ -57,12 +59,6 @@ public class Make4 extends Applet {
 					}
 				}
 			}
-
-			if(y==gb.HEIGHT-1) {
-				System.out.print("\n");  // thi
-			} else {
-				System.out.print("\n| ");
-			}
 		}
 	}
 	
@@ -71,7 +67,6 @@ public class Make4 extends Applet {
 		int numPlayer = np;
 		int wonType = 0;
 		
-		repaint(g);
 		getPlayerInput(player);
 		
 		while(wonType == 0) {
@@ -82,12 +77,12 @@ public class Make4 extends Applet {
 				player = 1;
 			}
 			
-			repaint(g);  // repaint
+			repaint();  // repaint
 			getPlayerInput(player);
 			wonType = gb.checkWin(player);
 		}
 
-		repaint(g);
+		repaint();
 		// repaint
 
 		switch(wonType) {
@@ -110,10 +105,12 @@ public class Make4 extends Applet {
 	*********************************************************************************/
 
 	public void getPlayerInput(int p) {  // diffrent class
+		System.out.println("User input");
 		int player = p;
 		try {
-			int playerColumn = Expo.enterIntGUI("Player " + player + "\'s turn: ");
-			
+			String tempString = JOptionPane.showInputDialog("Player " + player + "\'s turn: ");
+			int playerColumn = Integer.parseInt(tempString);
+
 			if(playerColumn>gb.WIDTH) {
 				throw new Exception();
 			} 
