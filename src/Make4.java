@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
+import java.applet.Applet;
 
 /**
  * @author Logan Stucki
@@ -22,13 +23,14 @@ import java.awt.*;
 /**
  * @since 0.1.0
  */
-public class Make4 extends Player {
+public class Make4 extends Applet {
+	Board gb = new Board();
 	public void paint(Graphics g) {
+
 		int w = Expo.enterIntGUI("Enter a board width");
 		int h = Expo.enterIntGUI("Enter a board height");
-		Make4 m4 = new Make4();
 		
-		paintBoard(g);
+		startGame(4,g);
 	}
 
 	public void repaint(Graphics g) {
@@ -36,10 +38,10 @@ public class Make4 extends Player {
 	}
 
 	public void paintBoard(Graphics g) {
-		for(int y = 0; y<HEIGHT; y++) {
-			for(int x = 0; x<WIDTH; x++) {
-				if(super.board[x][y] != 0) {
-					switch(board[x][y]) {
+		for(int y = 0; y<gb.HEIGHT; y++) {
+			for(int x = 0; x<gb.WIDTH; x++) {
+				if(gb.board[x][y] != 0) {
+					switch(gb.board[x][y]) {
 						case 1:
 							Expo.setColor(g, Expo.red);
 						break;
@@ -56,7 +58,7 @@ public class Make4 extends Player {
 				}
 			}
 
-			if(y==HEIGHT-1) {
+			if(y==gb.HEIGHT-1) {
 				System.out.print("\n");  // thi
 			} else {
 				System.out.print("\n| ");
@@ -64,21 +66,13 @@ public class Make4 extends Player {
 		}
 	}
 	
-	public Make4() {
-		super();
-	}
-	
-	public Make4(int w, int h) {
-		super(w,h);
-	}
-	
-	public void startGame(int np) {
+	public void startGame(int np, Graphics g) {
 		int player = 1;
 		int numPlayer = np;
 		int wonType = 0;
 		
-		repaint();
-		super.getPlayerInput(player);
+		repaint(g);
+		getPlayerInput(player);
 		
 		while(wonType == 0) {
 			
@@ -88,12 +82,12 @@ public class Make4 extends Player {
 				player = 1;
 			}
 			
-			repaint();  // repaint
-			super.getPlayerInput(player);
-			wonType = super.checkWin(player);
+			repaint(g);  // repaint
+			getPlayerInput(player);
+			wonType = gb.checkWin(player);
 		}
 
-		repaint();
+		repaint(g);
 		// repaint
 
 		switch(wonType) {
@@ -108,6 +102,29 @@ public class Make4 extends Player {
 			default:
 				System.out.println("There was an error with the win type...\nPlease contact the developer.");
 			break;
+		}
+	}
+
+	/*********************************************************************************
+	**********************************************************************************
+	*********************************************************************************/
+
+	public void getPlayerInput(int p) {  // diffrent class
+		int player = p;
+		try {
+			int playerColumn = Expo.enterIntGUI("Player " + player + "\'s turn: ");
+			
+			if(playerColumn>gb.WIDTH) {
+				throw new Exception();
+			} 
+			
+			gb.dropPiece(playerColumn, player);
+		} catch(ArrayIndexOutOfBoundsException ex) {
+			System.out.println("That collum appears to be full. please try a diffrent one");
+			getPlayerInput(player);
+		} catch(Exception e) {
+			System.out.println("Please input a valid collum between 1 and "+gb.WIDTH);
+			getPlayerInput(player);
 		}
 	}
 }
