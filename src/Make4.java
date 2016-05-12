@@ -1,9 +1,4 @@
-import java.util.Scanner;
-import java.io.*;
 import java.util.Arrays;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 import java.awt.*;
 import java.applet.Applet;
 
@@ -31,7 +26,9 @@ public class Make4 extends Applet {
 		startGame(4);
 	}
 
+	@Override
 	public void paint(Graphics g) {
+		super.paint(g);
 		System.out.println("Paint called");
 
 		Expo.setColor(g,Expo.black);
