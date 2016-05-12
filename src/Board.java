@@ -1,5 +1,8 @@
 import java.util.Arrays;
 
+/**
+ * @since 0.1.0
+ */
 class Board {
 	final int WIDTH;
 	final int HEIGHT;
@@ -18,7 +21,7 @@ class Board {
 		HEIGHT = board[0].length;
 	}
 
-	public void dropPiece(int x, int player) { // logic class
+	public void dropPiece(int x, int player) {
 		int xwidth = x-1;
 		int xheight = HEIGHT-1;
 		while (board[xwidth][xheight] != 0) {

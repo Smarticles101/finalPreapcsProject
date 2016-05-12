@@ -28,10 +28,8 @@ public class Make4 extends Applet {
 	}
 
 	public void paint(Graphics g) {
-		System.out.println("Paint called");
 		paintBoard(g);
 		if(!hasFirstRun) {
-			System.out.println("hasFirstRun=="+hasFirstRun);
 			hasFirstRun = true;
 			startGame(2,g);
 		}
@@ -63,7 +61,6 @@ public class Make4 extends Applet {
 							Expo.setColor(g,Expo.purple);
 						break;
 					}
-					System.out.println("x="+x+"\ny="+y);
 					Expo.fillCircle(g,x*100+50,y*100+50,45);
 				}
 			}
@@ -71,8 +68,6 @@ public class Make4 extends Applet {
 	}
 	
 	public void startGame(int np, Graphics g) {
-
-		System.out.println("Game started");
 		int player = 0;
 		int numPlayer = np;
 		int wonType = 0;
@@ -97,15 +92,15 @@ public class Make4 extends Applet {
 
 		switch(wonType) {
 			case 1:
-				System.out.println("Player "+player+" won!");
+				JOptionPane.showMessageDialog(null, "Player "+player+" won!");
 			break;
 
 			case 2:
-				System.out.println("There was a draw!");
+				JOptionPane.showMessageDialog(null, "There was a draw!");
 			break;
 
 			default:
-				System.out.println("There was an error with the win type...\nPlease contact the developer.");
+				JOptionPane.showMessageDialog(null, "There was an error with the win type...\nPlease contact the developer.");
 			break;
 		}
 	}
@@ -115,23 +110,21 @@ public class Make4 extends Applet {
 	*********************************************************************************/
 
 	public void getPlayerInput(int p) {  // diffrent class
-		System.out.println("User input");
 		int player = p;
 		try {
 			String tempString = JOptionPane.showInputDialog("Player " + player + "\'s turn: ");
 			int playerColumn = Integer.parseInt(tempString);
 
 			if(playerColumn>gb.WIDTH) {
-				System.out.println("I threw an Exception");
 				throw new Exception();
 			} 
 			
 			gb.dropPiece(playerColumn, player);
 		} catch(ArrayIndexOutOfBoundsException ex) {
-			System.out.println("That collum appears to be full. please try a diffrent one");
+			JOptionPane.showMessageDialog(null, "That collum appears to be full. please try a diffrent one");
 			getPlayerInput(player);
 		} catch(Exception e) {
-			System.out.println("Please input a valid collum between 1 and "+gb.WIDTH);
+			JOptionPane.showMessageDialog(null, "Please input a valid collum between 1 and "+gb.WIDTH);
 			getPlayerInput(player);
 		}
 	}
