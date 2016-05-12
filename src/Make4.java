@@ -1,6 +1,7 @@
 import java.util.Arrays;
 import java.awt.*;
 import java.applet.Applet;
+import javax.swing.JOptionPane;
 
 /**
  * @author Logan Stucki
@@ -19,18 +20,24 @@ import java.applet.Applet;
  * @since 0.1.0
  */
 public class Make4 extends Applet {
-	Board gb;
+	Board gb = new Board();
+	boolean hasFirstRun;
 
-	public void start() {
-		gb = new Board();
-		startGame(4);
+	public void start(Graphics g) {
+		hasFirstRun = false;
 	}
 
-	@Override
 	public void paint(Graphics g) {
-		super.paint(g);
 		System.out.println("Paint called");
+		paintBoard(g);
+		if(!hasFirstRun) {
+			System.out.println("hasFirstRun=="+hasFirstRun);
+			hasFirstRun = true;
+			startGame(2,g);
+		}
+	}
 
+	public void paintBoard(Graphics g) {
 		Expo.setColor(g,Expo.black);
 		for(int y = 0; y<gb.HEIGHT*100; y+=100) {
 			Expo.drawLine(g,0,y,gb.WIDTH*100,y);
@@ -40,7 +47,7 @@ public class Make4 extends Applet {
 		}
 
 		for(int y = 0; y<gb.HEIGHT; y++) {
-			for(int x = 0; x<gb.WIDTH; x++) {
+			for(int x = gb.WIDTH-1; x>=0; x--) {
 				if(gb.board[x][y] != 0) {
 					switch(gb.board[x][y]) {
 						case 1:
@@ -56,13 +63,15 @@ public class Make4 extends Applet {
 							Expo.setColor(g,Expo.purple);
 						break;
 					}
-					Expo.fillCircle(g,x+50,y+50,50);
+					System.out.println("x="+x+"\ny="+y);
+					Expo.fillCircle(g,x*100+50,y*100+50,45);
 				}
 			}
 		}
 	}
 	
-	public void startGame(int np) {
+	public void startGame(int np, Graphics g) {
+
 		System.out.println("Game started");
 		int player = 0;
 		int numPlayer = np;
@@ -78,12 +87,12 @@ public class Make4 extends Applet {
 				player = 1;
 			}
 			
-			repaint();  // repaint
+			paintBoard(g);  // repaint
 			getPlayerInput(player);
 			wonType = gb.checkWin(player);
 		}
 
-		repaint();
+		paintBoard(g);
 		// repaint
 
 		switch(wonType) {
