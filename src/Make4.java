@@ -24,14 +24,16 @@ import java.applet.Applet;
  * @since 0.1.0
  */
 public class Make4 extends Applet {
-	Board gb = new Board();
+	Board gb;
 
-	public void paint(Graphics g) {
-		paintBoard(g);		
-		startGame(4,g);
+	public void start() {
+		gb = new Board();
+		startGame(4);
 	}
 
-	public void paintBoard(Graphics g) {
+	public void paint(Graphics g) {
+		System.out.println("Paint called");
+
 		Expo.setColor(g,Expo.black);
 		for(int y = 0; y<gb.HEIGHT*100; y+=100) {
 			Expo.drawLine(g,0,y,gb.WIDTH*100,y);
@@ -63,7 +65,8 @@ public class Make4 extends Applet {
 		}
 	}
 	
-	public void startGame(int np, Graphics g) {
+	public void startGame(int np) {
+		System.out.println("Game started");
 		int player = 0;
 		int numPlayer = np;
 		int wonType = 0;
@@ -78,12 +81,12 @@ public class Make4 extends Applet {
 				player = 1;
 			}
 			
-			paintBoard(g);  // repaint
+			repaint();  // repaint
 			getPlayerInput(player);
 			wonType = gb.checkWin(player);
 		}
 
-		paintBoard(g);
+		repaint();
 		// repaint
 
 		switch(wonType) {
@@ -113,16 +116,17 @@ public class Make4 extends Applet {
 			int playerColumn = Integer.parseInt(tempString);
 
 			if(playerColumn>gb.WIDTH) {
-				//throw new Exception();
+				System.out.println("I threw an Exception");
+				throw new Exception();
 			} 
 			
 			gb.dropPiece(playerColumn, player);
 		} catch(ArrayIndexOutOfBoundsException ex) {
 			System.out.println("That collum appears to be full. please try a diffrent one");
 			getPlayerInput(player);
-		} //catch(Exception e) {
-		//	System.out.println("Please input a valid collum between 1 and "+gb.WIDTH);
-		//	getPlayerInput(player);
-		//}
+		} catch(Exception e) {
+			System.out.println("Please input a valid collum between 1 and "+gb.WIDTH);
+			getPlayerInput(player);
+		}
 	}
 }
