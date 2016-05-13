@@ -43,18 +43,22 @@ class Board {
 	            }
 	                
 	            if (x + 3 < WIDTH && player == board[x+1][y] && board[x][y] == board[x+2][y] && board[x][y] == board[x+3][y]) {
-	                return 1;
+	                //System.out.println("Won horozontal");
+	                return 1; // won horozontal
 	            }
 	            
 	            if (y + 3 < HEIGHT) {
 	                if (board[x][y] == board[x][y+1] && board[x][y] == board[x][y+2] && board[x][y] == board[x][y+3]) {
-	                    return 1;
+	                    //System.out.println("Won vertical");
+	                    return 1; // won vertical
 	                }
-	                if (x + 3 < WIDTH && board[x][y] == board[x+1][y+1] && board[x][y] == board[y+2][y+2] && board[x][y] == board[y+3][y+3]) {
-	                    return 1;
+	                if (x + 3 < WIDTH && board[x][y] == board[x+1][y+1] && board[x][y] == board[x+2][y+2] && board[x][y] == board[x+3][y+3]) {
+	                    //System.out.println("Won diag 1\nboard[x][y]=="+board[x][y]);
+	                    return 1; // won diag 
 	                }
 	                if (x - 3 >= 0 && board[x][y] == board[x-1][y+1] && board[x][y] == board[x-2][y+2] && board[x][y] == board[x-3][y+3]) {
-	                    return 1;
+	                	//System.out.println("Won diag 2");   
+	                	return 1; // won diag
 	                }
 	            }
 	        }
