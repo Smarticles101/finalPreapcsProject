@@ -4,24 +4,28 @@ import java.util.Arrays;
  * @since 0.1.0
  */
 class Board {
-	final int WIDTH;
-	final int HEIGHT;
+	public final int WIDTH;
+	public final int HEIGHT;
+	private int player = 1; 					// Always start at player 1
+	public final int NUM_PLAYER;
 
-	int[][] board;
+	public int[][] board;
 
 	public Board() {
 		board = new int[7][6];
 		WIDTH = board.length;
 		HEIGHT = board[0].length;
+		NUM_PLAYER = 2;
 	}
 
-	public Board(int w, int h) {
+	public Board(int w, int h, int np) {
 		board = new int[w][h];
 		WIDTH = board.length;
 		HEIGHT = board[0].length;
+		NUM_PLAYER = np;
 	}
 
-	public void dropPiece(int x, int player) {
+	public void dropPiece(int x) {
 		int xwidth = x-1;
 		int xheight = HEIGHT-1;
 		while (board[xwidth][xheight] != 0) {
@@ -31,7 +35,7 @@ class Board {
 		//System.out.println("Player placed piece at: " + xwidth + "," + xheight);
 	}
 	
-	public int checkWin(int player) {
+	public int checkWin() {						// return 1 for win, 2 for draw
 	    if(isDraw()) {
 	    	return 2;
 	    }
@@ -66,7 +70,7 @@ class Board {
 	    return 0;
 	}
 	
-	public boolean isDraw() {
+	private boolean isDraw() {
 		for(int x = 0; x < WIDTH; x++) {
 			for(int y = 0; y < HEIGHT; y++) {
 				if(board[x][y] == 0) {
@@ -75,5 +79,34 @@ class Board {
 			}
 		}
 		return true;
+	}
+
+	public void changePlayer() {
+		if(player<NUM_PLAYER) {
+			player++;
+		} else {
+			player = 1;
+		}
+	}
+
+	public int getPlayer() {
+		return player;
+	}
+
+	public int getWidth() {
+		return WIDTH;
+	}
+
+	public int getHeight() {
+		return HEIGHT;
+	}
+
+	public void resetGame() {
+		for(int x = 0; x < WIDTH; x++) {
+			for(int y = 0; y < HEIGHT; y++) {
+				board[x][y] = 0;
+			}
+		}
+		player = 0;							// start at 0, gamepanel file will iterate it to 1
 	}
 }

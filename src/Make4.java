@@ -2,6 +2,7 @@ import java.util.Arrays;
 import java.awt.*;
 import java.applet.Applet;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  * @author Logan Stucki
@@ -13,6 +14,8 @@ import javax.swing.JOptionPane;
  *		
  *		Trivial stuff:
  *			save/load game from file
+ *		
+ *		Impossible stuff:
  *			multiplayer over network
  */
 
@@ -21,49 +24,14 @@ import javax.swing.JOptionPane;
  */
 public class Make4 extends Applet {
 	Board gb = new Board();
-	boolean hasFirstRun;
+	boolean hasFirstRun = false;
 
-	public void start(Graphics g) {
-		hasFirstRun = false;
-	}
-
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		paintBoard(g);
 		if(!hasFirstRun) {
 			hasFirstRun = true;
 			startGame(2,g);
-		}
-	}
-
-	public void paintBoard(Graphics g) {
-		Expo.setColor(g,Expo.black);
-		for(int y = 0; y<gb.HEIGHT*100; y+=100) {
-			Expo.drawLine(g,0,y,gb.WIDTH*100,y);
-		}
-		for(int x = 0; x<gb.WIDTH*100; x+=100) {
-			Expo.drawLine(g,x,0,x,gb.HEIGHT*100);
-		}
-
-		for(int y = 0; y<gb.HEIGHT; y++) {
-			for(int x = gb.WIDTH-1; x>=0; x--) {
-				if(gb.board[x][y] != 0) {
-					switch(gb.board[x][y]) {
-						case 1:
-							Expo.setColor(g, Expo.red);
-						break;
-						case 2:
-							Expo.setColor(g,Expo.black);
-						break;
-						case 3:
-							Expo.setColor(g,Expo.green);
-						break;
-						case 4:
-							Expo.setColor(g,Expo.purple);
-						break;
-					}
-					Expo.fillCircle(g,x*100+50,y*100+50,45);
-				}
-			}
 		}
 	}
 	
@@ -109,7 +77,7 @@ public class Make4 extends Applet {
 	**********************************************************************************
 	*********************************************************************************/
 
-	public void getPlayerInput(int p) {  // diffrent class
+	public void getPlayerInput(int p) {
 		int player = p;
 		try {
 			String tempString = JOptionPane.showInputDialog("Player " + player + "\'s turn: ");
