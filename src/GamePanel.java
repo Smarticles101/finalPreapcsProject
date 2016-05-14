@@ -11,18 +11,44 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseMotionAdapter;
-
+/**
+ * @author Logan Stucki
+ * @version 0.1.0
+ * TODO:
+ *      Main menu
+ *      changing colors and board size
+ *      single player with simple ai
+ *      2+ player mode
+ *      
+ *      Trivial stuff:
+ *          save/load game from file
+ *      
+ *      Impossible stuff:
+ *          multiplayer over network
+ */
 class GamePanel extends JPanel {
-    private Board gb = new Board();
+    private Board gb;
+    private int panelX;
+    private int panelY;
 
-    public GamePanel() {
+    public GamePanel(int r, int c) {
+        panelY = y;
+        panelX = x;
+        gb = new Board(r,c);
 
         setBorder(BorderFactory.createLineBorder(Color.black));
 
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 int x = (e.getX()/100)+1;
-                gb.dropPiece(x);
+                boolean error = false;
+                try {
+                    gb.dropPiece(x);
+                } catch(ArrayIndexOutOfBoundsException aioobe) {
+                    JOptionPane.showMessageDialog(null, "That collum appears to be full. please try a diffrent one");
+                    error = true;
+                }
+                
                 switch(gb.checkWin()) {
                     case 1:
                         repaint();
@@ -47,8 +73,12 @@ class GamePanel extends JPanel {
                     break;
                 }
 
-                gb.changePlayer();
+                if(!error) {
+                    gb.changePlayer();
+                }
+                
                 repaint();
+                error = false;
             }
         });
 
@@ -72,7 +102,7 @@ class GamePanel extends JPanel {
     
 
     public Dimension getPreferredSize() {
-        return new Dimension(700,600);
+        return new Dimension(panelX,panelY);
     }
     
     protected void paintComponent(Graphics g) {
