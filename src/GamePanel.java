@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseMotionAdapter;
+
 /**
  * @author Logan Stucki
  * @version 0.1.0
@@ -30,79 +31,76 @@ class GamePanel extends JPanel {
     private Board gb;
     private int panelX;
     private int panelY;
+    boolean hasWon;
 
-    public GamePanel(int r, int c) {
-        panelY = y;
-        panelX = x;
-        gb = new Board(r,c);
+    public GamePanel() {
+        gb = new Board(1);
 
         setBorder(BorderFactory.createLineBorder(Color.black));
 
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
+                hasWon = false;
                 int x = (e.getX()/100)+1;
                 boolean error = false;
                 try {
-                    gb.dropPiece(x);
+                    System.out.println("x="+x+"player="+gb.getPlayer());
+                    gb.dropPiece(x, gb.getPlayer());
                 } catch(ArrayIndexOutOfBoundsException aioobe) {
                     JOptionPane.showMessageDialog(null, "That collum appears to be full. please try a diffrent one");
                     error = true;
                 }
-                
-                switch(gb.checkWin()) {
-                    case 1:
-                        repaint();
-                        int userChoice = JOptionPane.showConfirmDialog(null,"Play again?", "Player "+gb.getPlayer()+" won!", JOptionPane.YES_NO_OPTION);
-            
-                        if(userChoice==0) {
-                            gb.resetGame();
-                        } else {
-                            System.exit(0);
-                        }
-                    break;
 
-                    case 2:
-                        repaint();
-                        userChoice = JOptionPane.showConfirmDialog(null,"Play again?", "There was a draw!", JOptionPane.YES_NO_OPTION);
-                    
-                        if(userChoice==0) {
-                            gb.resetGame();
-                        } else {
-                            System.exit(0);
+                winDialogue();
+                if(!hasWon) {
+                    if(!error) {
+                        gb.changePlayer();
+                        if(gb.isAiGame()) {
+                            gb.aiMove();
+                            winDialogue();
+                            if(!hasWon) {
+                                gb.changePlayer();
+                            }
                         }
-                    break;
+                    }
                 }
-
-                if(!error) {
-                    gb.changePlayer();
-                }
-                
                 repaint();
                 error = false;
             }
         });
-
-        /*addMouseMotionListener(new MouseAdapter() {
-            public void mouseDragged(MouseEvent e) {
-                moveSquare(e.getX(),e.getY());
-            }
-        });*/
-        
     }
-    
-    /*private void moveSquare(int x, int y) {
-        int OFFSET = 1;
-        if ((squareX!=x) || (squareY!=y)) {
-            repaint(squareX,squareY,squareW+OFFSET,squareH+OFFSET);
-            squareX=x;
-            squareY=y;
-            repaint(squareX,squareY,squareW+OFFSET,squareH+OFFSET);
-        } 
-    }*/
+
+    public void winDialogue() {
+        switch(gb.checkWin()) {
+            case 1:
+                hasWon = true;
+                repaint();
+                int userChoice = JOptionPane.showConfirmDialog(null,"Play again?", "Player "+gb.getPlayer()+" won!", JOptionPane.YES_NO_OPTION);
+            
+                if(userChoice==0) {
+                    gb.resetGame();
+                } else {
+                    System.exit(0);
+                }
+            break;
+
+            case 2:
+            hasWon = true;
+                repaint();
+                userChoice = JOptionPane.showConfirmDialog(null,"Play again?", "There was a draw!", JOptionPane.YES_NO_OPTION);
+                    
+                if(userChoice==0) {
+                    gb.resetGame();
+                } else {
+                    System.exit(0);
+                }
+            break;
+        }
+    }
     
 
     public Dimension getPreferredSize() {
-        return new Dimension(panelX,panelY);
+        return new Dimension(700,600);
     }
     
     protected void paintComponent(Graphics g) {

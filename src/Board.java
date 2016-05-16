@@ -4,34 +4,42 @@ import java.util.Arrays;
  * @since 0.1.0
  */
 class Board {
-	public final int WIDTH;
-	public final int HEIGHT;
+	private final int WIDTH;
+	private final int HEIGHT;
 	private int player = 1; 					// Always start at player 1
-	public final int NUM_PLAYER;
+	private final int NUM_PLAYER;
+	private boolean isAiGame;
 
 	public int[][] board;
-
-	public Board() {
-		board = new int[7][6];
-		WIDTH = board.length;
-		HEIGHT = board[0].length;
-		NUM_PLAYER = 2;
-	}
 
 	public Board(int w, int h, int np) {
 		board = new int[w][h];
 		WIDTH = board.length;
 		HEIGHT = board[0].length;
-		NUM_PLAYER = np;
+		if(np == 1) {
+			isAiGame = true;
+			NUM_PLAYER = 2;
+		} else {
+			isAiGame = false;
+			NUM_PLAYER = np;
+		}
 	}
 
-	public void dropPiece(int x) {
+	public Board() {
+		this(7,6,1);
+	}
+
+	public Board(int np) {
+		this(7,6,np);
+	}
+
+	public void dropPiece(int x, int p) {
 		int xwidth = x-1;
 		int xheight = HEIGHT-1;
 		while (board[xwidth][xheight] != 0) {
 			xheight--;
 		}
-		board[xwidth][xheight] = player;
+		board[xwidth][xheight] = p;
 		//System.out.println("Player placed piece at: " + xwidth + "," + xheight);
 	}
 	
@@ -101,12 +109,25 @@ class Board {
 		return HEIGHT;
 	}
 
+	public boolean isAiGame() {
+		return isAiGame;
+	}
+
 	public void resetGame() {
 		for(int x = 0; x < WIDTH; x++) {
 			for(int y = 0; y < HEIGHT; y++) {
 				board[x][y] = 0;
 			}
 		}
-		player = 0;							// start at 0, gamepanel file will iterate it to 1
+		player = 1;
+	}
+
+	public void aiMove() {
+		try{
+			int decision = Expo.random(1,WIDTH);
+			dropPiece(decision,2);
+		} catch(ArrayIndexOutOfBoundsException e) {
+			aiMove();
+		}
 	}
 }
