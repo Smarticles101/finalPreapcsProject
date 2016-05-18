@@ -16,7 +16,7 @@ import java.awt.event.MouseMotionAdapter;
  * @author Logan Stucki
  * @version 0.1.0
  * TODO:
- *      Main menu
+ *      Main menu	(too lazy to design. use JOptionPane dialogs instead)
  *      changing colors and board size
  *      single player with simple ai
  *      2+ player mode
@@ -31,21 +31,30 @@ class GamePanel extends JPanel {
     private Board gb;
     private int panelX;
     private int panelY;
-    boolean hasWon;
+    private boolean hasWon;
+    private boolean isSaving = false;
 
     public GamePanel() {
-        gb = new Board(1);
-
+        
+        int userChoice = JOptionPane.showConfirmDialog(null,
+        "Save game?", "No game save was found.  Would you like to make a new one?"
+        , JOptionPane.YES_NO_OPTION);
+        
+        if(userChoice == 0) { 																	// if user says yes
+        	isSaving = true;																	// We enabled saving!
+        	String inputValue = JOptionPane.showInputDialog("Please name your game save:");
+        	
+        }
         setBorder(BorderFactory.createLineBorder(Color.black));
 
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 hasWon = false;
-                int x = (e.getX()/100)+1;
+                int column = (e.getX()/100)+1;
                 boolean error = false;
                 try {
-                    System.out.println("x="+x+"player="+gb.getPlayer());
-                    gb.dropPiece(x, gb.getPlayer());
+                    System.out.println("column="+column+"player="+gb.getPlayer());
+                    gb.dropPiece(column, gb.getPlayer());
                 } catch(ArrayIndexOutOfBoundsException aioobe) {
                     JOptionPane.showMessageDialog(null, "That collum appears to be full. please try a diffrent one");
                     error = true;
@@ -119,10 +128,10 @@ class GamePanel extends JPanel {
             Expo.drawLine(g,x,0,x,gb.getHeight()*100);
         }
 
-        for(int y = 0; y<gb.getHeight(); y++) {
-            for(int x = gb.getWidth()-1; x>=0; x--) {
-                if(gb.board[x][y] != 0) {
-                    switch(gb.board[x][y]) {
+        for(int column = gb.getWidth()-1; column >= 0; column--) {
+            for(int row = 0; row < gb.getHeight(); row++) {
+                if(gb.board[row][column] != 0) {
+                    switch(gb.board[row][column]) {
                         case 1:
                             Expo.setColor(g, Expo.red);
                         break;
@@ -136,7 +145,7 @@ class GamePanel extends JPanel {
                             Expo.setColor(g,Expo.purple);
                         break;
                     }
-                    Expo.fillCircle(g,x*100+50,y*100+50,45);
+                    Expo.fillCircle(g,column*100+50,row*100+50,45);
                 }
             }
         }

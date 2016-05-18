@@ -3,7 +3,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.JTextField;
 /**
  * TODO:
- *      reset player to 1 upon game reset
  */
 
 public class Make4Runner {
@@ -20,7 +19,6 @@ public class Make4Runner {
         System.out.println("Created GUI on EDT? "+
         SwingUtilities.isEventDispatchThread());
         JFrame f = new JFrame("Connect four by Logan Stucki");
-        // main menu??
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.add(new GamePanel());
         f.pack();
