@@ -1,9 +1,6 @@
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.JTextField;
-/**
- * TODO:
- */
 
 public class Make4Runner {
     
@@ -16,8 +13,8 @@ public class Make4Runner {
     }
 
     private static void createAndShowGUI() {
-        System.out.println("Created GUI on EDT? "+
-        SwingUtilities.isEventDispatchThread());
+        //System.out.println("Created GUI on EDT? "+
+        //SwingUtilities.isEventDispatchThread());
         JFrame f = new JFrame("Connect four by Logan Stucki");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.add(new GamePanel());
