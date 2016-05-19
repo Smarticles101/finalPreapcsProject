@@ -144,7 +144,11 @@ class Board {
 		try {
 			f = new File(SAVE_FILE);
 			if(!f.exists()) {
-				f.createNewFile();													// if save file does not exist, create it
+				File saveDir = new File("./saves");
+				if(!saveDir.exists()) {
+					saveDir.mkdirs();
+					f.createNewFile();													// if save file does not exist, create it
+				}
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
