@@ -44,7 +44,6 @@ class Board {
 		}
 		board[row][column] = p;
 		//System.out.println("Player placed piece at: " + xwidth + "," + xheight);
-		saveGame();								// game is always saved after a player moves
 	}
 	
 	public int checkWin() {						// return 1 for win, 2 for draw
