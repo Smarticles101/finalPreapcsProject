@@ -78,6 +78,7 @@ class GamePanel extends JPanel {
 						}
 					}
 				}
+				gb.saveGame();								// game is always saved after a player moves
 				repaint();
 				error = false;
 			}
